@@ -5,14 +5,14 @@ PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 6
   AndroidProfiler: 0
-  defaultScreenOrientation: 4
+  defaultScreenOrientation: 2
   targetDevice: 2
-  targetGlesGraphics: -1
+  targetGlesGraphics: 1
   targetIOSGraphics: -1
   targetResolution: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: 378-unity
+  productName: 2013_10 - Sample Assets
   cloudProjectId: 
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -75,13 +75,13 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleIdentifier: com.Company.ProductName
+  bundleIdentifier: com.u.t
   bundleVersion: 1.0
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
   xboxOneDisableKinectGpuReservation: 0
-  productGUID: 1a5224cb08f7a44ef9edc64af449222c
+  productGUID: 0086036c33305704294abb2f69fd081d
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 9
   AndroidPreferredInstallLocation: 1
@@ -117,7 +117,7 @@ PlayerSettings:
   iOSLaunchScreenLandscape: {fileID: 0}
   iOSLaunchScreenBackgroundColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 130023680
   iOSLaunchScreenFillPct: 100
   iOSLaunchScreenSize: 100
   iOSLaunchScreenCustomXibPath: 
@@ -134,7 +134,11 @@ PlayerSettings:
     banner: {fileID: 0}
   androidGamepadSupportLevel: 0
   resolutionDialogBanner: {fileID: 0}
-  m_BuildTargetIcons: []
+  m_BuildTargetIcons:
+  - m_BuildTarget: 
+    m_Icons:
+    - m_Icon: {fileID: 0}
+      m_Size: 128
   m_BuildTargetBatching: []
   webPlayerTemplate: APPLICATION:Default
   m_TemplateCustomTags: {}
@@ -197,7 +201,7 @@ PlayerSettings:
   ps4ApplicationParam2: 0
   ps4ApplicationParam3: 0
   ps4ApplicationParam4: 0
-  ps4Passcode: aUAYo7n4kFabjtbs7ilxsg07NEQokAjQ
+  ps4Passcode: jDlCmBUUbt1niY8s8b2ulzlefKoopIxA
   ps4pnSessions: 1
   ps4pnPresence: 1
   ps4pnFriends: 1
@@ -220,7 +224,7 @@ PlayerSettings:
   psp2LiveAreaTrialPath: 
   psp2PatchChangeInfoPath: 
   psp2PatchOriginalPackage: 
-  psp2PackagePassword: WYH6IPDqvtAwuDQw8EaCWZOSa5IueTf5
+  psp2PackagePassword: 
   psp2KeystoneFile: 
   psp2DRMType: 0
   psp2StorageType: 0
@@ -250,8 +254,14 @@ PlayerSettings:
   psp2InfoBarColor: 0
   psmSplashimage: {fileID: 0}
   spritePackerPolicy: 
-  scriptingDefineSymbols: {}
-  metroPackageName: 378-unity
+  scriptingDefineSymbols:
+    1: CROSS_PLATFORM_INPUT
+    2: CROSS_PLATFORM_INPUT
+    4: CROSS_PLATFORM_INPUT;MOBILE_INPUT
+    7: CROSS_PLATFORM_INPUT;MOBILE_INPUT
+    15: CROSS_PLATFORM_INPUT;MOBILE_INPUT
+    16: CROSS_PLATFORM_INPUT;MOBILE_INPUT
+  metroPackageName: 2013_10 - Sample Assets
   metroPackageLogo: 
   metroPackageLogo140: 
   metroPackageLogo180: 
@@ -262,7 +272,7 @@ PlayerSettings:
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: 378-unity
+  metroApplicationDescription: 2013_10 - Sample Assets
   metroStoreTileLogo80: 
   metroStoreTileLogo: 
   metroStoreTileLogo140: 
@@ -365,16 +375,12 @@ PlayerSettings:
   XboxOneAllowedProductIds: []
   XboxOnePersistentLocalStorageSize: 0
   intPropertyNames:
-  - Metro::ScriptingBackend
-  - WP8::ScriptingBackend
   - WebGL::ScriptingBackend
   - WebGL::audioCompressionFormat
   - WebGL::exceptionSupport
   - WebGL::memorySize
   - iOS::Architecture
   - iOS::ScriptingBackend
-  Metro::ScriptingBackend: 2
-  WP8::ScriptingBackend: 2
   WebGL::ScriptingBackend: 1
   WebGL::audioCompressionFormat: 4
   WebGL::exceptionSupport: 0
@@ -383,9 +389,7 @@ PlayerSettings:
   iOS::ScriptingBackend: 0
   boolPropertyNames:
   - WebGL::dataCaching
-  - XboxOne::enus
   WebGL::dataCaching: 0
-  XboxOne::enus: 1
   stringPropertyNames:
   - WebGL::emscriptenArgs
   - WebGL::template
