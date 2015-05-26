@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: b329953a2f725aa4b81889eb1cf60d13
+timeCreated: 1432623124
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - JetEngine: {fileID: 8300000, guid: 3b09d59f4499d45428baa7a21e954296, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
