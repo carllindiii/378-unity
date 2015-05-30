@@ -29,6 +29,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		CapsuleCollider m_Capsule;
 		bool m_Crouching;
 
+		const float Fall_Trigger = 20; // Value of how far down you fall before sound plays
+		float FallDistance; // Used to keep track of fall distance
+
+		public AudioClip FallSound; // Sound to play if fell from high altitude (can be changed)
+		private AudioSource source;
+
 
 		void Start()
 		{
@@ -40,6 +46,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 			m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 			m_OrigGroundCheckDistance = m_GroundCheckDistance;
+
+			// Setting up fall animation stuff
+			source = GetComponent<AudioSource>();
+			FallDistance = 0;
 		}
 
 
@@ -213,9 +223,26 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				m_GroundNormal = hitInfo.normal;
 				m_IsGrounded = true;
 				m_Animator.applyRootMotion = true;
+
+				// Find fall distance from previous y distance
+				FallDistance -= transform.position.y;
+				//Debug.Log (FallDistance);
+				if (FallDistance > Fall_Trigger) {
+					// Apply fall damage/animation
+					source.PlayOneShot(FallSound, 0.5f); // Playing sound when falling
+					// Can add animation here
+					//
+					//
+				}
+				// Reset FallDistance since grounded.
+				FallDistance = 0;
 			}
 			else
 			{
+				// No longer grounded, set initial fall distance at current y position
+				if (FallDistance < transform.position.y)
+					FallDistance = transform.position.y;
+				//Debug.Log (FallDistance);
 				m_IsGrounded = false;
 				m_GroundNormal = Vector3.up;
 				m_Animator.applyRootMotion = false;

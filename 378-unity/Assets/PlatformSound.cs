@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlatformSound : MonoBehaviour {
 
-	public AudioClip JetEngine;
+	public AudioClip LandingSound;
 	private AudioSource source;
 	
 	void Awake () {
@@ -14,7 +14,7 @@ public class PlatformSound : MonoBehaviour {
 	
 	void OnCollisionEnter (Collision coll)
 	{
-		source.PlayOneShot(JetEngine, 1.0f);
+		source.PlayOneShot(LandingSound, 0.5f);
 	}
 	
 }
