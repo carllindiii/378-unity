@@ -643,7 +643,6 @@ ModelImporter:
     bakeSimulation: 0
     optimizeGameObjects: 0
     motionNodeName: 
-    pivotNodeName: 
     animationCompression: 0
     animationRotationError: .5
     animationPositionError: .5
@@ -681,7 +680,7 @@ ModelImporter:
       name: StandHalfTurnRight
       takeName: _97_TO_100_a_U1_M_P_idle_NeutralTO45IdleTONeutralIdle__Fb_p45_No_0_PJ_2
       firstFrame: 622
-      lastFrame: 659
+      lastFrame: 732
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -766,6 +765,7 @@ ModelImporter:
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
+    keepQuads: 0
     weldVertices: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
@@ -1608,3 +1608,4 @@ ModelImporter:
   additionalBone: 0
   userData: 
   assetBundleName: 
+  assetBundleVariant: 
