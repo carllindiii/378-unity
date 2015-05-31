@@ -129,6 +129,7 @@ MonoBehaviour:
   m_MoveSpeedMultiplier: 1
   m_AnimSpeedMultiplier: 1
   m_GroundCheckDistance: .100000001
+  FallSound: {fileID: 0}
 --- !u!114 &11498698
 MonoBehaviour:
   m_ObjectHideFlags: 1
