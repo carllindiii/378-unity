@@ -33,6 +33,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		float FallDistance; // Used to keep track of fall distance
 
 		public AudioClip FallSound; // Sound to play if fell from high altitude (can be changed)
+		public AudioClip LandSound; // Sound to play when landing (not from high altitude)
 		private AudioSource source;
 
 
@@ -225,10 +226,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				//Debug.Log (FallDistance);
 				if (FallDistance > Fall_Trigger) {
 					// Apply fall damage/animation
-					source.PlayOneShot(FallSound, 0.5f); // Playing sound when falling
+					source.PlayOneShot(FallSound, 0.25f); // Playing sound when falling
 					// Can add animation here
 					m_Animator.Play ("Death");
 					//
+				}
+				else if (FallDistance >= 1){
+					source.PlayOneShot(LandSound, 0.25f); // Playing sound when falling
 				}
 				// Reset FallDistance since grounded.
 				FallDistance = 0;
