@@ -703,7 +703,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 013949646b0ada54e9d9384f6cf4298d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LoseSound: {fileID: 0}
 --- !u!23 &215778806
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3563,25 +3562,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5a97962f7d5ba4df0823334b52c7c02c, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &329516184 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 189070, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 2}
-  m_PrefabInternal: {fileID: 563248172}
---- !u!111 &329516185
-Animation:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 329516184}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 0}
-  m_Animations:
-  - {fileID: 7400000, guid: 06d7b9c4d1c774cb98513eb99721fb6f, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 1
-  m_CullingType: 1
 --- !u!1001 &330123284
 Prefab:
   m_ObjectHideFlags: 0
@@ -4190,7 +4170,7 @@ Prefab:
     - target: {fileID: 11469404, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 2}
       propertyPath: FallSound
       value: 
-      objectReference: {fileID: 8300000, guid: bd9566abdbf08834281bfb4ea8b92a5d, type: 3}
+      objectReference: {fileID: 8300000, guid: 847fa143e78699443aee05a24e0e65d0, type: 3}
     - target: {fileID: 474146, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 2}
       propertyPath: m_LocalRotation.x
       value: .00773419999

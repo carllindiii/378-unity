@@ -29,7 +29,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		CapsuleCollider m_Capsule;
 		bool m_Crouching;
 
-		const float Fall_Trigger = 20; // Value of how far down you fall before sound plays
+		const float Fall_Trigger = 15; // Value of how far down you fall before sound plays
 		float FallDistance; // Used to keep track of fall distance
 
 		public AudioClip FallSound; // Sound to play if fell from high altitude (can be changed)
