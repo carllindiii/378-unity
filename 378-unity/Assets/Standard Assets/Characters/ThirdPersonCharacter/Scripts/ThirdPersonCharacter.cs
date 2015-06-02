@@ -39,6 +39,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		// Checkpoint stuff
 		public Vector3 Checkpoint_Position;
+		public int current_checkpoint;
 
 		void Start()
 		{
@@ -55,6 +56,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			source = GetComponent<AudioSource>();
 			FallDistance = 0;
 			Checkpoint_Position = transform.position;
+			current_checkpoint = 1;
 		}
 
 
@@ -90,9 +92,17 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		}
 
 		void OnCollisionEnter(Collision checkpoint) {
+			//Debug.Log (checkpoint.gameObject.name);
+			//Debug.Log ("Checkpoint " + current_checkpoint.ToString ());
+
+			// Looks for collision of next checkpoint
 			if (checkpoint.gameObject.tag == "Checkpoint") {
-				Checkpoint_Position = checkpoint.gameObject.transform.position;
-				Checkpoint_Position.x += 1.0f;
+				if (checkpoint.gameObject.name == ("Checkpoint " + current_checkpoint.ToString ())) {
+					//Debug.Log ("Found checkpoint");
+					Checkpoint_Position = checkpoint.gameObject.transform.position;
+					Checkpoint_Position.x += 1.0f;
+					current_checkpoint++; // Increment which checkpoint to look for next
+				}
 			}
 		}
 
