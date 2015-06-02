@@ -89,9 +89,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			UpdateAnimator(move);
 		}
 
-		void OnTriggerEnter(Collider checkpoint) {
-			if (checkpoint.tag == "Checkpoint") {
-				Checkpoint_Position = checkpoint.transform.position;
+		void OnCollisionEnter(Collision checkpoint) {
+			if (checkpoint.gameObject.tag == "Checkpoint") {
+				Checkpoint_Position = checkpoint.gameObject.transform.position;
+				Checkpoint_Position.x += 1.0f;
 			}
 		}
 
