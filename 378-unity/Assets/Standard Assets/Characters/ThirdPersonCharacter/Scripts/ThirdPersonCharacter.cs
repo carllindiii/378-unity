@@ -37,6 +37,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		private AudioSource source;
 
 
+		// Checkpoint stuff
+		public Vector3 Checkpoint_Position;
+
 		void Start()
 		{
 			m_Animator = GetComponent<Animator>();
@@ -51,12 +54,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			// Setting up fall animation stuff
 			source = GetComponent<AudioSource>();
 			FallDistance = 0;
+			Checkpoint_Position = transform.position;
 		}
 
 
 		public void Move(Vector3 move, bool crouch, bool jump)
 		{
-
 			// convert the world relative moveInput vector into a local-relative
 			// turn amount and forward amount required to head in the desired
 			// direction.
@@ -86,6 +89,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			UpdateAnimator(move);
 		}
 
+		void OnTriggerEnter(Collider checkpoint) {
+			if (checkpoint.tag == "Checkpoint") {
+				Checkpoint_Position = checkpoint.transform.position;
+			}
+		}
+
+		public void Checkpoint() {
+			transform.position = Checkpoint_Position;
+		}
 
 		void ScaleCapsuleForCrouching(bool crouch)
 		{
