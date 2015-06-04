@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
@@ -41,6 +42,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		public Vector3 Checkpoint_Position;
 		public int current_checkpoint;
 
+		// Health System
+		public float health = 100f;
+		public float delayAfterDeath = 5f;
+		public float deathTimer = 0;
+		public AudioClip DeathSound;
+		private bool playerDead = false;
+		public Slider HealthSlider;
+
 		void Start()
 		{
 			m_Animator = GetComponent<Animator>();
@@ -57,6 +66,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			FallDistance = 0;
 			Checkpoint_Position = transform.position;
 			current_checkpoint = 1;
+
+			// Regenerate health
+			InvokeRepeating("Regenerate", 0f, 5.0f); // Every 5 seconds regenerate health
 		}
 
 
@@ -87,22 +99,73 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			ScaleCapsuleForCrouching(crouch);
 			PreventStandingInLowHeadroom();
 
-			// send input and other state parameters to the animator
-			UpdateAnimator(move);
+			// Check player's health
+
+			if (CheckHealth () == true) {
+				// send input and other state parameters to the animator
+				UpdateAnimator(move);
+			}
 		}
 
-		void OnCollisionEnter(Collision checkpoint) {
+		// Player's collision detection
+		void OnCollisionEnter(Collision coll) {
 			//Debug.Log (checkpoint.gameObject.name);
 			//Debug.Log ("Checkpoint " + current_checkpoint.ToString ());
 
 			// Looks for collision of next checkpoint
-			if (checkpoint.gameObject.tag == "Checkpoint") {
-				if (checkpoint.gameObject.name == ("Checkpoint " + current_checkpoint.ToString ())) {
+			if (coll.gameObject.tag == "Checkpoint") {
+				if (coll.gameObject.name == ("Checkpoint " + current_checkpoint.ToString ())) {
 					//Debug.Log ("Found checkpoint");
-					Checkpoint_Position = checkpoint.gameObject.transform.position;
+					Checkpoint_Position = coll.gameObject.transform.position;
 					Checkpoint_Position.x += 1.0f;
 					current_checkpoint++; // Increment which checkpoint to look for next
 				}
+			} else if (coll.gameObject.tag == "Enemy") { // Looks for collision with enemy (or anything that will hurt player)
+				// Hurt player here
+				// Adjust health
+				// Play sound
+			}
+		}
+
+		// Checks if player is dead (return false), if not return true
+		bool CheckHealth() {
+			//Debug.Log("Health is " + health);
+			if (health <= 0) { // DEAD
+				// Death sound/animation here
+				if (playerDead == false) {
+					// play dead animation
+					// play dead sound
+					playerDead = true;
+					Debug.Log("DEAD");
+				}
+				else {
+					DeathDelay();
+				}
+				return false;
+			} else {
+				// Still alive
+				return true;
+			}
+		}
+
+		void DeathDelay() {
+			deathTimer += Time.deltaTime;
+
+			if (deathTimer >= delayAfterDeath) {
+				// Reset character to checkpoint
+				playerDead = false;
+				deathTimer = 0;
+				health = 100f;
+				HealthSlider.value = health;
+				Checkpoint();
+			}
+		}
+
+		void Regenerate() {
+			Debug.Log ("Regenerating... Health is " + health);
+			if (health < 100 && health > 0) {
+				health += 1.0f;
+				HealthSlider.value = health;
 			}
 		}
 
@@ -252,7 +315,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 					source.PlayOneShot(FallSound, 0.25f); // Playing sound when falling
 					// Can add animation here
 					m_Animator.Play ("Death");
-					//
+					// Adjust health
+					health -= 25.0f;
+					HealthSlider.value = health;
 				}
 				else if (FallDistance >= 1){
 					source.PlayOneShot(LandSound, 0.25f); // Playing sound when falling
