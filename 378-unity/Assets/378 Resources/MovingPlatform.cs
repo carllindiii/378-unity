@@ -9,7 +9,7 @@ public class MovingPlatform : MonoBehaviour {
 	public Transform position2;
 	public Vector3 newPosition;
 	public string currentState;
-	public float smooth;
+	public float speed;
 	public float resetTime;
 
 	// Use this for initialization
@@ -19,7 +19,7 @@ public class MovingPlatform : MonoBehaviour {
 	
 	// FixedUpdate is different from Update in the sense that FixedUpdate remains the same even during Frame Rate drop
 	void FixedUpdate() {
-		movingPlatform.position = Vector3.Lerp(movingPlatform.position, newPosition, smooth * Time.deltaTime);
+		movingPlatform.position = Vector3.Lerp(movingPlatform.position, newPosition, speed * Time.deltaTime);
 	}
 
 	// Change the currentState depending on currentState (if that makes sense)
