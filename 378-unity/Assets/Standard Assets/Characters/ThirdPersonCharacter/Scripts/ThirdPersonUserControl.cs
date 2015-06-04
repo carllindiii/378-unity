@@ -63,8 +63,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 m_Move = v*Vector3.forward + h*Vector3.right;
             }
 #if !MOBILE_INPUT
-			// walk speed multiplier
-	        if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
+
+			m_Move *= 0.75f;
+			// sprint speed multiplier
+	        if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 1.5f;
+
 #endif
 
 			if (Input.GetKey (KeyCode.Escape))
