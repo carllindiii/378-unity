@@ -121,7 +121,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			}
 		}
 
-		// Player's collision detection
+		// Player's collision detectioeath
 		void OnCollisionEnter(Collision coll) {
 			//Debug.Log (checkpoint.gameObject.name);
 			//Debug.Log ("Checkpoint " + current_checkpoint.ToString ());
@@ -260,7 +260,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			// Play footstep sounds if in motion
 			footstepTimer += Time.deltaTime;
 			// If moving and on ground, play footstep sound every so time, depending on if sprinting
-			if ((m_ForwardAmount > 0 || m_TurnAmount > 0) && footstepTimer > footstepSpeed && m_IsGrounded && !m_Crouching /* && !hurt (NOT WORKING)*/) {
+			if ((m_ForwardAmount > 0 || m_TurnAmount > 0) && footstepTimer > footstepSpeed && m_IsGrounded && !m_Crouching &&
+			    !m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Death")) {
 				source.PlayOneShot(FootstepSound, 0.1f);
 				footstepTimer = 0;
 			}
