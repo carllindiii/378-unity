@@ -32,11 +32,17 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		const float Fall_Trigger = 15; // Value of how far down you fall before sound plays
 		float FallDistance; // Used to keep track of fall distance
+		float footstepTimer = 0; // Timer used for footsteps
+		float footstepSpeed; // Time before next footstep plays (lower => more frequent footsteps)
 
 		public AudioClip FallSound; // Sound to play if fell from high altitude (can be changed)
 		public AudioClip LandSound; // Sound to play when landing (not from high altitude)
+		public AudioClip LandTerrainSound; // Sound to play when landing on terrain
+		public AudioClip FootstepSound; // Sound to play during move animation for footsteps
 		private AudioSource source;
 
+		private bool LandPlatform = false;
+		private bool LandTerrain = false;
 
 		// Checkpoint stuff
 		public Vector3 Checkpoint_Position;
@@ -49,6 +55,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		public AudioClip DeathSound;
 		private bool playerDead = false;
 		public Slider HealthSlider;
+		private bool hurt = false;
 
 		void Start()
 		{
@@ -72,7 +79,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		}
 
 
-		public void Move(Vector3 move, bool crouch, bool jump)
+		public void Move(Vector3 move, bool crouch, bool jump, bool sprint)
 		{
 			// convert the world relative moveInput vector into a local-relative
 			// turn amount and forward amount required to head in the desired
@@ -83,6 +90,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			move = Vector3.ProjectOnPlane(move, m_GroundNormal);
 			m_TurnAmount = Mathf.Atan2(move.x, move.z);
 			m_ForwardAmount = move.z;
+
+			// check if sprinting
+			if (sprint == true) {
+				footstepSpeed = 0.25f;
+			} else {
+				footstepSpeed = 0.4f;
+			}
 
 			ApplyExtraTurnRotation();
 
@@ -124,7 +138,30 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				// Hurt player here
 				// Adjust health
 				// Play sound
+			} 
+
+			/*else if (FallDistance >= 1) {
+				if (coll.gameObject.tag == "Platform") {
+					source.PlayOneShot(LandSound, 0.25f);
+					FallDistance = 0;
+				}
+				if (coll.gameObject.name == "Terrain") {
+					source.PlayOneShot(LandTerrainSound, 0.25f);
+					FallDistance = 0;
+				}
+			} */
+			/*
+			if (!m_IsGrounded) {
+				if (coll.gameObject.tag == "Platform") {
+					LandPlatform = true;
+					LandTerrain = false;
+				}
+				if (coll.gameObject.name == "Terrain") {
+					LandTerrain = true;
+					LandPlatform = false;
+				}
 			}
+			*/
 		}
 
 		// Checks if player is dead (return false), if not return true
@@ -220,6 +257,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_Animator.SetBool("Crouch", m_Crouching);
 			m_Animator.SetBool("OnGround", m_IsGrounded);
 
+			// Play footstep sounds if in motion
+			footstepTimer += Time.deltaTime;
+			// If moving and on ground, play footstep sound every so time, depending on if sprinting
+			if ((m_ForwardAmount > 0 || m_TurnAmount > 0) && footstepTimer > footstepSpeed && m_IsGrounded && !m_Crouching /* && !hurt (NOT WORKING)*/) {
+				source.PlayOneShot(FootstepSound, 0.1f);
+				footstepTimer = 0;
+			}
+
 			if (!m_IsGrounded) {
 				m_Animator.SetFloat ("Jump", m_Rigidbody.velocity.y);
 			}
@@ -314,14 +359,27 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 					// Apply fall damage/animation
 					source.PlayOneShot(FallSound, 0.25f); // Playing sound when falling
 					// Can add animation here
+					hurt = true;
 					m_Animator.Play ("Death");
 					// Adjust health
 					health -= 25.0f;
 					HealthSlider.value = health;
 				}
-				else if (FallDistance >= 1){
-					source.PlayOneShot(LandSound, 0.25f); // Playing sound when falling
+				else if (FallDistance >= 1) {
+					source.PlayOneShot(LandSound, 0.15f);
 				}
+
+				/*
+				else if (FallDistance >= 1){
+					if (LandPlatform == true) {
+						source.PlayOneShot(LandSound, 0.25f); // Playing sound when falling
+						LandPlatform = false;
+					}
+					else if (LandTerrain == true) {
+						source.PlayOneShot(LandTerrainSound, 0.25f);
+						LandTerrain = false;
+					}
+				}*/
 				// Reset FallDistance since grounded.
 				FallDistance = 0;
 			}

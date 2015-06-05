@@ -66,7 +66,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 			m_Move *= 0.75f;
 			// sprint speed multiplier
-	        if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 1.5f;
+			bool sprint = false;
+	        if (Input.GetKey(KeyCode.LeftShift)) {
+				m_Move *= 1.5f;
+				sprint = true;
+			}
 
 #endif
 
@@ -74,7 +78,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				m_Character.Checkpoint ();
 
 			// pass all parameters to the character control script
-            m_Character.Move(m_Move, crouch, m_Jump);
+            m_Character.Move(m_Move, crouch, m_Jump, sprint);
             m_Jump = false;
         }
     }

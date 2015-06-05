@@ -6173,6 +6173,10 @@ Prefab:
       propertyPath: HealthSlider
       value: 
       objectReference: {fileID: 323247046}
+    - target: {fileID: 11469404, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 2}
+      propertyPath: FootstepSound
+      value: 
+      objectReference: {fileID: 8300000, guid: e9714160ce34f2b4ab63ff8c27bd68e1, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 2}
   m_IsPrefabParent: 0
@@ -8889,7 +8893,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 429578, guid: 8213f956818f7466786fac884d820cce, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 429578, guid: 8213f956818f7466786fac884d820cce, type: 2}
       propertyPath: m_LocalScale.z
