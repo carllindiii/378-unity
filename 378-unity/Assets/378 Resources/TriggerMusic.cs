@@ -16,9 +16,6 @@ public class TriggerMusic : MonoBehaviour {
 	// Change to PRESS E to play music
 	void OnCollisionEnter (Collision coll)
 	{
-		if (playing == false) {
-			transform.parent.GetComponent<MusicManagerScript>().PlaySong(source.clip);
-			playing = true;
-		}
+		transform.parent.GetComponent<MusicManagerScript>().PlaySong(source.clip);
 	}
 }

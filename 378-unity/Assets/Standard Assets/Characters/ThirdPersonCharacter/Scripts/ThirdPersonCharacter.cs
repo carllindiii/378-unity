@@ -362,8 +362,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 					// Can add animation here
 					hurt = true;
 					m_Animator.Play ("Death");
+
 					// Adjust health
-					health -= 25.0f;
+					float healthAdjust = (FallDistance/Fall_Trigger);
+					health -= (10.0f * healthAdjust);
 					HealthSlider.value = health;
 				}
 				else if (FallDistance >= 1) {
