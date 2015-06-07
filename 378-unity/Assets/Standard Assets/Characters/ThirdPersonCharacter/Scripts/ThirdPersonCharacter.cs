@@ -115,13 +115,30 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 			// Check player's health
 
-			if (CheckHealth () == true) {
+			if (CheckHealth() == true) {
 				// send input and other state parameters to the animator
 				UpdateAnimator(move);
 			}
 		}
 
-		// Player's collision detectioeath
+		// Trigger checks (used for lava)
+		void OnTriggerEnter(Collider coll) {
+			if (coll.name == "Lava") {
+				health = 0;
+				if (!source.isPlaying)
+					source.PlayOneShot (FallSound, 0.25f);
+			}
+		}
+
+		void OnParticleCollision(GameObject coll) {
+			//if (coll.tag == "Poison") {
+				health -= 1;
+				if (!source.isPlaying)
+					source.PlayOneShot (FallSound, 0.25f); 
+			//}
+		}
+
+		// Player's collision detection
 		void OnCollisionEnter(Collision coll) {
 			//Debug.Log (checkpoint.gameObject.name);
 			//Debug.Log ("Checkpoint " + current_checkpoint.ToString ());
@@ -135,11 +152,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 					current_checkpoint++; // Increment which checkpoint to look for next
 				}
 			} else if (coll.gameObject.tag == "Enemy") { // Looks for collision with enemy (or anything that will hurt player)
-				// Hurt player here
+				// Enemies/Obstacles can hurt player
 				// Adjust health
 				// Play sound
-			} 
+			}
 
+			// CODE FOR DIFFERENT SOUNDS ON LANDING ON TERRAIN (BUGGY!)
 			/*else if (FallDistance >= 1) {
 				if (coll.gameObject.tag == "Platform") {
 					source.PlayOneShot(LandSound, 0.25f);
@@ -167,6 +185,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		// Checks if player is dead (return false), if not return true
 		bool CheckHealth() {
 			//Debug.Log("Health is " + health);
+			HealthSlider.value = health;
 			if (health <= 0) { // DEAD
 				// Death sound/animation here
 				if (playerDead == false) {
