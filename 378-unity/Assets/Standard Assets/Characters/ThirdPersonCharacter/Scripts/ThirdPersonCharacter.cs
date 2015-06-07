@@ -57,6 +57,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		public Slider HealthSlider;
 		private bool hurt = false;
 
+		public Image DamageScreenFlash;
+		public float flashSpeed = 1f;
+		public Color flashColor = new Color(1f, 0f, 0f, 0.5f);
+
+		private bool InPoison = false;
+
 		void Start()
 		{
 			m_Animator = GetComponent<Animator>();
@@ -114,28 +120,40 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			PreventStandingInLowHeadroom();
 
 			// Check player's health
+			if (InPoison)
+				PlayerInPoison();
 
 			if (CheckHealth() == true) {
 				// send input and other state parameters to the animator
 				UpdateAnimator(move);
 			}
+			DamageScreenFlash.color = Color.Lerp (DamageScreenFlash.color, Color.clear, flashSpeed * Time.deltaTime);
+
 		}
 
 		// Trigger checks (used for lava)
 		void OnTriggerEnter(Collider coll) {
+			Debug.Log (coll.name);
 			if (coll.name == "Lava") {
-				health = 0;
+				TakeDamage(100f);
 				if (!source.isPlaying)
 					source.PlayOneShot (FallSound, 0.25f);
+			} else if (coll.tag == "Poison") {
+				InPoison = true;
 			}
 		}
 
-		void OnParticleCollision(GameObject coll) {
-			//if (coll.tag == "Poison") {
-				health -= 1;
-				if (!source.isPlaying)
-					source.PlayOneShot (FallSound, 0.25f); 
-			//}
+		/*
+		void OnTriggerExit(Collider coll) {
+			if (coll.tag == "Poison") {
+				InPoison = false;
+			}
+		}*/
+
+		public void PlayerInPoison() {
+			TakeDamage(1.0f);
+			if (!source.isPlaying)
+				source.PlayOneShot (FallSound, 0.25f); 
 		}
 
 		// Player's collision detection
@@ -223,6 +241,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				health += 1.0f;
 				HealthSlider.value = health;
 			}
+		}
+
+		void TakeDamage(float dmg) {
+			health -= dmg;
+			DamageScreenFlash.color = flashColor;
 		}
 
 		public void Checkpoint() {
@@ -384,8 +407,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 					// Adjust health
 					float healthAdjust = (FallDistance/Fall_Trigger);
-					health -= (10.0f * healthAdjust);
-					HealthSlider.value = health;
+					TakeDamage(10.0f * healthAdjust);
 				}
 				else if (FallDistance >= 1) {
 					source.PlayOneShot(LandSound, 0.15f);
