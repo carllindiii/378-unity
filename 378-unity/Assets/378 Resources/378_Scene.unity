@@ -21632,6 +21632,10 @@ Prefab:
       propertyPath: EmissionModule.rate.scalar
       value: 40
       objectReference: {fileID: 0}
+    - target: {fileID: 6436548, guid: d2debcb3c417b07419457484a835eb7d, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d2debcb3c417b07419457484a835eb7d, type: 2}
   m_IsPrefabParent: 0
