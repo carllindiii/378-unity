@@ -60,7 +60,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		public Image DamageScreenFlash;
 		public float flashSpeed = 1f;
 		public Color flashColor = new Color(1f, 0f, 0f, 0.5f);
+		public Color checkpointEnterColor = new Color(0f, 0f, 1f, 0.5f);
 
+		
 		private bool InPoison = false;
 
 		void Start()
@@ -140,6 +142,17 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 					source.PlayOneShot (FallSound, 0.25f);
 			} else if (coll.tag == "Poison") {
 				InPoison = true;
+			} // Looks for collision of next checkpoint
+			else if (coll.tag == "Checkpoint") {
+				if (coll.name == ("Checkpoint " + current_checkpoint.ToString ())) {
+					//Debug.Log ("Found checkpoint");
+					Checkpoint_Position = coll.gameObject.transform.position;
+					Checkpoint_Position.x += 2.0f;
+					Checkpoint_Position.y += 4.0f;
+					current_checkpoint++; // Increment which checkpoint to look for next
+
+					coll.GetComponentInChildren<Light>().color = checkpointEnterColor;
+				}
 			}
 		}
 
@@ -161,15 +174,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			//Debug.Log (checkpoint.gameObject.name);
 			//Debug.Log ("Checkpoint " + current_checkpoint.ToString ());
 
-			// Looks for collision of next checkpoint
-			if (coll.gameObject.tag == "Checkpoint") {
-				if (coll.gameObject.name == ("Checkpoint " + current_checkpoint.ToString ())) {
-					//Debug.Log ("Found checkpoint");
-					Checkpoint_Position = coll.gameObject.transform.position;
-					Checkpoint_Position.x += 1.0f;
-					current_checkpoint++; // Increment which checkpoint to look for next
-				}
-			} else if (coll.gameObject.tag == "Enemy") { // Looks for collision with enemy (or anything that will hurt player)
+			if (coll.gameObject.tag == "Enemy") { // Looks for collision with enemy (or anything that will hurt player)
 				// Enemies/Obstacles can hurt player
 				// Adjust health
 				// Play sound
@@ -250,6 +255,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		public void Checkpoint() {
 			transform.position = Checkpoint_Position;
+		}
+
+		public void Checkpoint(int checkpoint) {
+			GameObject devCheckpoint = GameObject.Find("Checkpoint " + checkpoint);
+
+			Vector3 vector3 = devCheckpoint.transform.position;
+			vector3.x += 2.0f;
+			vector3.y += 5.0f;
+			transform.position = vector3;
 		}
 
 		void ScaleCapsuleForCrouching(bool crouch)
