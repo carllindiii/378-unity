@@ -9,6 +9,7 @@ TagManager:
   - Platform
   - Enemy
   - Poison
+  - Lava
   layers:
   - Default
   - TransparentFX

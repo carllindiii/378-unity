@@ -91,6 +91,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				m_Character.Checkpoint (5);
 			if (Input.GetKey (KeyCode.Alpha6))
 				m_Character.Checkpoint (6);
+			if (Input.GetKey (KeyCode.Alpha7))
+				m_Character.Checkpoint (7);
 
 			// pass all parameters to the character control script
             m_Character.Move(m_Move, crouch, m_Jump, sprint);
