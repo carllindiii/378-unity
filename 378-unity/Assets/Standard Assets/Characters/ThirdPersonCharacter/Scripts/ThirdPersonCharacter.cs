@@ -58,8 +58,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		private bool hurt = false;
 
 		public Image DamageScreenFlash;
-		public float flashSpeed = 1f;
-		public Color flashColor = new Color(1f, 0f, 0f, 0.5f);
+		public float flashSpeed = 0.5f;
+		public Color flashColor = new Color(1f, 0f, 0f, 0.05f);
 		public Color checkpointEnterColor = new Color(0f, 0f, 1f, 0.5f);
 
 		
@@ -136,7 +136,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		// Trigger checks (used for lava)
 		void OnTriggerEnter(Collider coll) {
 			Debug.Log (coll.name);
-			if (coll.name == "Lava") {
+			if (coll.tag == "Lava") {
 				TakeDamage(100f);
 				if (!source.isPlaying)
 					source.PlayOneShot (FallSound, 0.25f);

@@ -39,6 +39,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
             }
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
         }
 
 
