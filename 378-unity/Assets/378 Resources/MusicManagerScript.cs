@@ -59,6 +59,7 @@ public class MusicManagerScript : MonoBehaviour {
 			// another song is playing, fade out and play new main song
 			FadeOut = true;
 			nextSong = main;
+			Main_Song = main;
 		} else {
 			Main_Song = main; 
 		}
