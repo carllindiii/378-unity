@@ -36,6 +36,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		float footstepTimer = 0; // Timer used for footsteps
 		float footstepSpeed; // Time before next footstep plays (lower => more frequent footsteps)
 
+		public AudioClip CoughingSound; // Sound to play if in the poison gas
 		public AudioClip FallSound; // Sound to play if fell from high altitude (can be changed)
 		public AudioClip LandSound; // Sound to play when landing (not from high altitude)
 		public AudioClip LandTerrainSound; // Sound to play when landing on terrain
@@ -60,11 +61,20 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		public Image DamageScreenFlash;
 		public float flashSpeed = 0.5f;
-		public Color flashColor = new Color(1f, 0f, 0f, 0.05f);
+		public Color flashColor_Red = new Color(1f, 0f, 0f, 0.5f);
+		public Color flashColor_Green = new Color (0f, 1f, 0f, 0.5f);
 		public Color checkpointEnterColor = new Color(0f, 0f, 1f, 0.5f);
 
-		private bool healthRegen = false;
+		private bool inHealingPool = false;
 		private bool InPoison = false;
+
+		// MAGIC NUMBERS
+		public readonly float FALL_DISTANCE_MULTIPLIER = 1.2f;
+		public readonly float POISON_DMG = 0.8f;
+		public readonly int POISON_DMG_TIME_DELAY = 1;
+		public readonly float HEALTH_REGEN_RATE = 1.0f;
+		public readonly float HEALING_POOL_DELAY = 0.2f;
+		
 
 		void Start()
 		{
@@ -122,8 +132,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			ScaleCapsuleForCrouching(crouch);
 			PreventStandingInLowHeadroom();
 
-			if (healthRegen)
-				Regenerate ();
 			// Check player's health
 			if (CheckHealth() == true) {
 				// send input and other state parameters to the animator
@@ -137,7 +145,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		void OnTriggerEnter(Collider coll) {
 			Debug.Log (coll.name);
 			if (coll.tag == "Lava") {
-				TakeDamage(100f);
+				TakeDamage(100f, flashColor_Red);
 				if (!source.isPlaying)
 					source.PlayOneShot (FallSound, 0.25f);
 			} // Looks for collision of next checkpoint
@@ -146,7 +154,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				StartCoroutine(PlayerInPoison ());
 			}
 			else if (coll.name == "Healing Pool Collider") {
-				healthRegen = true;
+				inHealingPool = true;
+				StartCoroutine(HealThisAmount (HEALTH_REGEN_RATE));
 			}
 			else if (coll.tag == "Checkpoint") {
 				if (coll.name == ("Checkpoint " + current_checkpoint.ToString ())) {
@@ -169,16 +178,27 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				Debug.Log ("Exit poison");
 			}
 			else if (coll.name == "Healing Pool Collider") {
-				healthRegen = false;
+				StopCoroutine(HealThisAmount (HEALTH_REGEN_RATE));
+				inHealingPool = false;
 			}
 		}
 
 		IEnumerator PlayerInPoison() {
 			while (InPoison) {
-				TakeDamage (2f);
-				source.PlayOneShot (FallSound, 0.25f); 
-				yield return new WaitForSeconds (1);	
+				TakeDamage (POISON_DMG, flashColor_Green);
+				// repeat the sound AFTER it fully finishes
+				if (source.isPlaying == false) {
+					PlaySoundAtVol(CoughingSound, 0.25f); 
+				}
+				yield return new WaitForSeconds (POISON_DMG_TIME_DELAY);	
 			}
+		}
+
+		// Method replicating source.PlayOneShot BUT ensures source.isPlaying will return true
+		void PlaySoundAtVol(AudioClip sound, float volume) {
+			source.clip = sound;
+			source.volume = volume;
+			source.Play ();
 		}
 
 		// Player's collision detection
@@ -255,12 +275,22 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		void Regenerate() {
 			Debug.Log ("Regenerating... Health is " + health);
 			if (health < 100 && health > 0) {
-				health += 1.0f;
+				health += HEALTH_REGEN_RATE;
 				HealthSlider.value = health;
 			}
 		}
 
-		void TakeDamage(float dmg) {
+		IEnumerator HealThisAmount(float healingRate) {
+			while (inHealingPool) {
+				if (health < 100 && health > 0) {
+					health += healingRate;
+					HealthSlider.value = health;
+				}
+				yield return new WaitForSeconds (HEALING_POOL_DELAY);
+			}
+		}
+
+		void TakeDamage(float dmg, Color flashColor) {
 			health -= dmg;
 			DamageScreenFlash.color = flashColor;
 		}
@@ -432,8 +462,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 					m_Animator.Play ("Death");
 
 					// Adjust health
-					float healthAdjust = (FallDistance/Fall_Trigger);
-					TakeDamage(10.0f * healthAdjust);
+					float healthAdjust = (FallDistance * FALL_DISTANCE_MULTIPLIER/Fall_Trigger);
+					TakeDamage(10.0f * healthAdjust, flashColor_Red);
 				}
 				else if (FallDistance >= 1) {
 					source.PlayOneShot(LandSound, 0.15f);
