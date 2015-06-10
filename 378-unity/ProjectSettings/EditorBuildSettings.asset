@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/378 Resources/378_Scene_Alpha_Build1.unity
   - enabled: 0
+    path: Assets/378 Resources/378_Scene_Alpha_Build1.unity
+  - enabled: 1
     path: Assets/378 Resources/378_Scene.unity
