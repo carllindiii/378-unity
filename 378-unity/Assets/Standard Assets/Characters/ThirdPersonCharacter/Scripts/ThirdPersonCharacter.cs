@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
@@ -62,7 +63,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		public Color flashColor = new Color(1f, 0f, 0f, 0.05f);
 		public Color checkpointEnterColor = new Color(0f, 0f, 1f, 0.5f);
 
-		
+		private bool healthRegen = false;
 		private bool InPoison = false;
 
 		void Start()
@@ -121,10 +122,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			ScaleCapsuleForCrouching(crouch);
 			PreventStandingInLowHeadroom();
 
+			if (healthRegen)
+				Regenerate ();
 			// Check player's health
-			if (InPoison)
-				PlayerInPoison();
-
 			if (CheckHealth() == true) {
 				// send input and other state parameters to the animator
 				UpdateAnimator(move);
@@ -140,9 +140,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				TakeDamage(100f);
 				if (!source.isPlaying)
 					source.PlayOneShot (FallSound, 0.25f);
-			} else if (coll.tag == "Poison") {
-				InPoison = true;
 			} // Looks for collision of next checkpoint
+			else if (coll.tag == "Poison") {
+				InPoison = true;
+				StartCoroutine(PlayerInPoison ());
+			}
+			else if (coll.name == "Healing Pool Collider") {
+				healthRegen = true;
+			}
 			else if (coll.tag == "Checkpoint") {
 				if (coll.name == ("Checkpoint " + current_checkpoint.ToString ())) {
 					//Debug.Log ("Found checkpoint");
@@ -156,17 +161,24 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			}
 		}
 
-		/*
+		
 		void OnTriggerExit(Collider coll) {
 			if (coll.tag == "Poison") {
+				StopCoroutine(PlayerInPoison ());
 				InPoison = false;
+				Debug.Log ("Exit poison");
 			}
-		}*/
+			else if (coll.name == "Healing Pool Collider") {
+				healthRegen = false;
+			}
+		}
 
-		public void PlayerInPoison() {
-			TakeDamage(1.0f);
-			if (!source.isPlaying)
+		IEnumerator PlayerInPoison() {
+			while (InPoison) {
+				TakeDamage (2f);
 				source.PlayOneShot (FallSound, 0.25f); 
+				yield return new WaitForSeconds (1);	
+			}
 		}
 
 		// Player's collision detection
