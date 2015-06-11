@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class DisplayText : MonoBehaviour {
 
@@ -9,7 +10,7 @@ public class DisplayText : MonoBehaviour {
 
 	void OnTriggerEnter(Collider enter) {
 		TextMesh robotText = (TextMesh) GetComponentInChildren(typeof(TextMesh));
-		robotText.text = "Hello Human! You must reach the top of the terrain\nand claim this planet as your own! Good Luck :)";
+		robotText.text = GetComponent<Text>().text.ToString ();
 	}
 
 	void OnTriggerExit(Collider enter) {
