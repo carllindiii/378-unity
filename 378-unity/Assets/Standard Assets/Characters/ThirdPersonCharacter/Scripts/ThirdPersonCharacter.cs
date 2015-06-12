@@ -74,7 +74,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		public readonly int POISON_DMG_TIME_DELAY = 1;
 		public readonly float HEALTH_REGEN_RATE = 1.0f;
 		public readonly float HEALING_POOL_DELAY = 0.2f;
-		
+
+		// End Game Stuff
+		public bool EndGame = false;
 
 		void Start()
 		{
@@ -167,6 +169,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 					coll.GetComponentInChildren<Light>().color = checkpointEnterColor;
 				}
+			}
+			else if (coll.name == "EndGameTrigger") {
+				EndGame = true;
 			}
 		}
 
