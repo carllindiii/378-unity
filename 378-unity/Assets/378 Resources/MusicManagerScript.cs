@@ -21,11 +21,14 @@ public class MusicManagerScript : MonoBehaviour {
 
 		// Transfers to next scene, if the other scene has a music manager.
 		GameObject music_manager = GameObject.Find ("Music Manager");
-		if (music_manager != null) {
-			// makes sure that there is no duplicate sound.
-			Destroy(music_manager);
-		}
-		DontDestroyOnLoad (gameObject);
+
+		// even though DontDestroyOnLoad is present....it still destroys on load :(
+
+//		if (music_manager != null) {
+//			// makes sure that there is no duplicate sound.
+//			Destroy(music_manager);
+//		}
+//		DontDestroyOnLoad (gameObject);
 	}
 
 	void Update() {
