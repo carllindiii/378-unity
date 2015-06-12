@@ -18,6 +18,14 @@ public class MusicManagerScript : MonoBehaviour {
 		source = GetComponent<AudioSource>();
 		defaultVolume = source.volume;
 		AudioVolume = defaultVolume;
+
+		// Transfers to next scene, if the other scene has a music manager.
+		GameObject music_manager = GameObject.Find ("Music Manager");
+		if (music_manager != null) {
+			// makes sure that there is no duplicate sound.
+			Destroy(music_manager);
+		}
+		DontDestroyOnLoad (gameObject);
 	}
 
 	void Update() {

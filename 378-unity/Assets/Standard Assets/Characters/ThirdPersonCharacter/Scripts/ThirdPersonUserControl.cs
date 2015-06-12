@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+using UnityEngine.UI;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
@@ -13,6 +14,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Vector3 m_Move;
         private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
 
+		private Vector3 EndGameVector = new Vector3(0f,0f,0f);
+		public Image EndGameFade;
+		private float FadeSpeed = 0.5f;
+		private float FadeDelay = 10f;
+		private float FadeTimer = 0;
         
         private void Start()
         {
@@ -75,28 +81,39 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			}
 
 #endif
+			if (m_Character.EndGame == false) {
+				if (Input.GetKey (KeyCode.Escape))
+					m_Character.Checkpoint ();
 
-			if (Input.GetKey (KeyCode.Escape))
-				m_Character.Checkpoint ();
+				if (Input.GetKey (KeyCode.Alpha1))
+					m_Character.Checkpoint (1);
+				if (Input.GetKey (KeyCode.Alpha2))
+					m_Character.Checkpoint (2);
+				if (Input.GetKey (KeyCode.Alpha3))
+					m_Character.Checkpoint (3);
+				if (Input.GetKey (KeyCode.Alpha4))
+					m_Character.Checkpoint (4);
+				if (Input.GetKey (KeyCode.Alpha5))
+					m_Character.Checkpoint (5);
+				if (Input.GetKey (KeyCode.Alpha6))
+					m_Character.Checkpoint (6);
+				if (Input.GetKey (KeyCode.Alpha7))
+					m_Character.Checkpoint (7);
 
-			if (Input.GetKey (KeyCode.Alpha1))
-				m_Character.Checkpoint (1);
-			if (Input.GetKey (KeyCode.Alpha2))
-				m_Character.Checkpoint (2);
-			if (Input.GetKey (KeyCode.Alpha3))
-				m_Character.Checkpoint (3);
-			if (Input.GetKey (KeyCode.Alpha4))
-				m_Character.Checkpoint (4);
-			if (Input.GetKey (KeyCode.Alpha5))
-				m_Character.Checkpoint (5);
-			if (Input.GetKey (KeyCode.Alpha6))
-				m_Character.Checkpoint (6);
-			if (Input.GetKey (KeyCode.Alpha7))
-				m_Character.Checkpoint (7);
+				// pass all parameters to the character control script
+				m_Character.Move (m_Move, crouch, m_Jump, sprint);
+				m_Jump = false;
+			} else {
+				m_Character.Move (EndGameVector, false, false, false); // make sure character does not move.
+				// Fade screen
+				EndGameFade.color = Color.Lerp (EndGameFade.color, Color.black, FadeSpeed * Time.deltaTime);
 
-			// pass all parameters to the character control script
-            m_Character.Move(m_Move, crouch, m_Jump, sprint);
-            m_Jump = false;
+				FadeTimer += Time.deltaTime;
+				if (FadeTimer >= FadeDelay) {
+					Debug.Log ("CHANGE SCENES NOW");
+					Application.LoadLevel ("TestNextScene");
+				}
+			}
         }
     }
 }
