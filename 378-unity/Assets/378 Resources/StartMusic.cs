@@ -13,6 +13,5 @@ public class StartMusic : MonoBehaviour {
 	void OnTriggerEnter (Collider coll)
 	{
 		transform.parent.GetComponent<MusicManagerScript>().MainSong(source.clip);
-		Debug.Log("QUEUE MUSIC");
 	}
 }
