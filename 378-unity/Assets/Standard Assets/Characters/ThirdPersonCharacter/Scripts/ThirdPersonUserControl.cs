@@ -15,7 +15,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Vector3 m_Move;
         private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
 
-		private Vector3 EndGameVector = new Vector3(0f,-10f,0f);
+		private Vector3 EndGameVector = new Vector3(0f,0f,0f);
 		private Animator finalShipAnimator;
 		public Image EndGameFade;
 		private float FadeSpeed = 0.5f;
@@ -85,7 +85,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 #endif
 			if (m_Character.EndGame == false) {
-				if (Input.GetKey (KeyCode.Escape))
+				if (Input.GetKey (KeyCode.R))
 					m_Character.Checkpoint ();
 
 				if (Input.GetKey (KeyCode.Alpha1))

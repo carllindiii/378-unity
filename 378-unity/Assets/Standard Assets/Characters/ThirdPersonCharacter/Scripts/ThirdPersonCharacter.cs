@@ -48,7 +48,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		// Checkpoint stuff
 		public Vector3 Checkpoint_Position;
-		public int current_checkpoint;
+		public int next_checkpoint;
 
 		// Health System
 		public float health = 100f;
@@ -64,6 +64,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		public Color flashColor_Red = new Color(1f, 0f, 0f, 0.5f);
 		public Color flashColor_Green = new Color (0f, 1f, 0f, 0.5f);
 		public Color checkpointEnterColor = new Color(0f, 0f, 1f, 0.5f);
+		public Color checkpointRedColor = new Color (1f, 0f, 0f, 0.5f);
 
 		private bool inHealingPool = false;
 		private bool InPoison = false;
@@ -93,7 +94,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			source = GetComponent<AudioSource>();
 			FallDistance = 0;
 			Checkpoint_Position = transform.position;
-			current_checkpoint = 1;
+			next_checkpoint = 1;
 
 			// Regenerate health
 			InvokeRepeating("Regenerate", 0f, 5.0f); // Every 5 seconds regenerate health
@@ -160,20 +161,19 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				StartCoroutine(HealThisAmount (HEALTH_REGEN_RATE));
 			}
 			else if (coll.tag == "Checkpoint") {
-				if (coll.name == ("Checkpoint " + current_checkpoint.ToString ())) {
+				if (coll.name == ("Checkpoint " + next_checkpoint.ToString ())) {
 					//Debug.Log ("Found checkpoint");
 					Checkpoint_Position = coll.gameObject.transform.position;
 					Checkpoint_Position.x += 2.0f;
 					Checkpoint_Position.y += 4.0f;
-					current_checkpoint++; // Increment which checkpoint to look for next
+					next_checkpoint++; // Increment which checkpoint to look for next
+					Debug.Log ("collider checkpoint: " + next_checkpoint);
 
 					coll.GetComponentInChildren<Light>().color = checkpointEnterColor;
 				}
 			}
 			else if (coll.tag == "EndGameTrigger") {
 				EndGame = true;
-
-
 			}
 		}
 
@@ -270,11 +270,19 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			deathTimer += Time.deltaTime;
 
 			if (deathTimer >= delayAfterDeath) {
-				// Reset character to checkpoint
+				// Reset character to previous checkpoint
 				playerDead = false;
 				deathTimer = 0;
 				health = 100f;
 				HealthSlider.value = health;
+
+				// if not the first checkpoint, reset to previous
+				if(next_checkpoint > 1) {
+					next_checkpoint--;
+					GameObject nextCheckpoint = GameObject.Find("Checkpoint " + next_checkpoint);
+					nextCheckpoint.GetComponentInChildren<Light>().color = checkpointRedColor;
+					Checkpoint_Position = SetCheckpointLocation(next_checkpoint - 1);
+				}
 				Checkpoint();
 			}
 		}
@@ -307,13 +315,19 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		}
 
 		public void Checkpoint(int checkpoint) {
-			GameObject devCheckpoint = GameObject.Find("Checkpoint " + checkpoint);
+			transform.position = SetCheckpointLocation(checkpoint);
+		}
 
+		private Vector3 SetCheckpointLocation(int checkpoint) {
+			GameObject devCheckpoint = GameObject.Find("Checkpoint " + checkpoint);
+			
 			Vector3 vector3 = devCheckpoint.transform.position;
 			vector3.x += 2.0f;
 			vector3.y += 5.0f;
-			transform.position = vector3;
+
+			return vector3;
 		}
+
 
 		void ScaleCapsuleForCrouching(bool crouch)
 		{
