@@ -15,7 +15,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Vector3 m_Move;
         private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
 
-		private Vector3 EndGameVector = new Vector3(0f,0f,0f);
+		private Vector3 EndGameVector = new Vector3(0f,-10f,0f);
 		private Animator finalShipAnimator;
 		public Image EndGameFade;
 		private float FadeSpeed = 0.5f;
@@ -111,7 +111,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				GameObject.Find("EthanBody").GetComponent<Renderer>().enabled = false;
 				GameObject.Find("EthanGlasses").GetComponent<Renderer>().enabled = false;
 
-				m_Cam.transform.LookAt(GameObject.Find ("SciFi_Fighter_AK5 Blue").transform);
+				// if you can see the ship, look at it. 
+				if(GameObject.Find ("SciFi_Fighter_AK5 Blue").GetComponent<Renderer>().isVisible) {
+					m_Cam.transform.LookAt(GameObject.Find ("SciFi_Fighter_AK5 Blue").transform);
+				}
+				else {
+				}
+				Camera.main.fieldOfView = 100;
+
 				if(finalShipAnimator.GetCurrentAnimatorStateInfo(0).IsName("None")) {
 					finalShipAnimator.Play ("FlyAway");
 				}
