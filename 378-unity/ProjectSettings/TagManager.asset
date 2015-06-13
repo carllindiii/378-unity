@@ -10,6 +10,7 @@ TagManager:
   - Enemy
   - Poison
   - Lava
+  - EndGameTrigger
   layers:
   - Default
   - TransparentFX

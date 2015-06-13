@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityEngine.UI;
+using UnityStandardAssets;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
@@ -15,6 +16,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
 
 		private Vector3 EndGameVector = new Vector3(0f,0f,0f);
+		private Animator finalShipAnimator;
 		public Image EndGameFade;
 		private float FadeSpeed = 0.5f;
 		private float FadeDelay = 10f;
@@ -36,6 +38,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
             // get the third person character ( this should never be null due to require component )
             m_Character = GetComponent<ThirdPersonCharacter>();
+			finalShipAnimator = GameObject.Find ("SciFi_Fighter_AK5 Blue").GetComponent<Animator>();
         }
 
 
@@ -105,14 +108,25 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				m_Jump = false;
 			} else {
 				m_Character.Move (EndGameVector, false, false, false); // make sure character does not move.
-				// Fade screen
-				EndGameFade.color = Color.Lerp (EndGameFade.color, Color.black, FadeSpeed * Time.deltaTime);
+				GameObject.Find("EthanBody").GetComponent<Renderer>().enabled = false;
+				GameObject.Find("EthanGlasses").GetComponent<Renderer>().enabled = false;
 
-				FadeTimer += Time.deltaTime;
-				if (FadeTimer >= FadeDelay) {
-					Debug.Log ("CHANGE SCENES NOW");
-					Application.LoadLevel ("TestNextScene");
+				m_Cam.transform.LookAt(GameObject.Find ("SciFi_Fighter_AK5 Blue").transform);
+				if(finalShipAnimator.GetCurrentAnimatorStateInfo(0).IsName("None")) {
+					finalShipAnimator.Play ("FlyAway");
 				}
+
+//				Transform cameraView = m_Cam.transform;
+//				cameraView.transform.tra.position.x -= 100;
+//				m_Cam.position = cameraView.position;
+//				
+				// Fade screen
+				//EndGameFade.color = Color.Lerp (EndGameFade.color, Color.black, FadeSpeed * Time.deltaTime);
+//				FadeTimer += Time.deltaTime;
+//				if (FadeTimer >= FadeDelay) {
+//					Debug.Log ("CHANGE SCENES NOW");
+//					Application.LoadLevel ("TestNextScene");
+//				}
 			}
         }
     }

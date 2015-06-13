@@ -170,8 +170,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 					coll.GetComponentInChildren<Light>().color = checkpointEnterColor;
 				}
 			}
-			else if (coll.name == "EndGameTrigger") {
+			else if (coll.tag == "EndGameTrigger") {
 				EndGame = true;
+
+
 			}
 		}
 
@@ -278,7 +280,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		}
 
 		void Regenerate() {
-			Debug.Log ("Regenerating... Health is " + health);
+			//Debug.Log ("Regenerating... Health is " + health);
 			if (health < 100 && health > 0) {
 				health += HEALTH_REGEN_RATE;
 				HealthSlider.value = health;
