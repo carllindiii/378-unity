@@ -11,6 +11,7 @@ TagManager:
   - Poison
   - Lava
   - EndGameTrigger
+  - EndGameText
   layers:
   - Default
   - TransparentFX

@@ -121,6 +121,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 				if(finalShipAnimator.GetCurrentAnimatorStateInfo(0).IsName("None")) {
 					finalShipAnimator.Play ("FlyAway");
+
+					//ending credits
+					GameObject endGameTextObj = GameObject.Find ("EndGameText");
+					TextMesh endGameText = (TextMesh) endGameTextObj.GetComponentInChildren(typeof(TextMesh));
+					endGameText.text = endGameTextObj.GetComponentInChildren<Text>().text.ToString ();
 				}
 
 //				Transform cameraView = m_Cam.transform;
