@@ -14,7 +14,7 @@ public class CheckpointTextTrigger : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider enter) {
 		if (checkActivate == false) {
-			message.text = "Checkpoint!\nPress ESC to return.";
+			message.text = "Checkpoint!\nPress R to return.";
 			checkActivate = true;
 		}
 	}
